@@ -18,15 +18,21 @@ Page de détail film : -tous les détails du film(affiche, résumé, titre , gen
 			 
 
 Panier : affichage de quantité avec option de suppression et d'ajout
+		
 	 
 
 Page login: login par mail, et proposition d'inscription (si compte non existant)
 	   
 Page Inscription :  formulaire (nom, prénom, email, téléphone (null), mot de passe et confirmation)
-		    lien vers login si isset compte  
+		            lien vers login si isset compte  
 
 
 Page espace client : affichage des réservations (tri des réservations)
+
+bonus: suppression avec demande de confirmation en modal
+	   admin dans la barre de navigation
+	   pagination
+	   carrousel d'affiche de film
 
 
 footer: - 
