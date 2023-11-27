@@ -33,6 +33,7 @@ bonus: suppression avec demande de confirmation en modal
 	   admin dans la barre de navigation
 	   pagination
 	   carrousel d'affiche de film
+	   diminution et augmentation des quantités avec JS
 
 
 footer: - 
