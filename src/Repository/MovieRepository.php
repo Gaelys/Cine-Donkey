@@ -1,5 +1,5 @@
 <?php
-require '/../Model/Database.php';
+require_once __DIR__ . '/../Model/Database.php';
 
 class MovieRepository {
 

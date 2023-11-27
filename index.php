@@ -1,5 +1,8 @@
 <?php
-require_once '/src/Repository/MovieRepository.php';
+require_once __DIR__ . '/src/Repository/MovieRepository.php';
 
+// routeur
+
+$movies = new MovieRepository();
 $movies->getMovies();
 var_dump($movies);
