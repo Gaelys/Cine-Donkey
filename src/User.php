@@ -1,60 +1,55 @@
 <?php
 require_once 'Database.php';
 
-class User {
-    private string $firstname;
-    private string $lastname;
-    private INT $phoneNumber;
+class User extends Database {
+    private string $firstName;
+    private string $lastName;
+    private int $phoneNumber;
     private string $email;
     private string $password;
-
-    public function __construct() {
-        
-    }
-
 
     
     //GETTERS AND SETTERS
 
     /**
-     * Get the value of firstname
+     * Get the value of firstName
      *
      * @return string
      */
-    public function getFirstname(): string {
-        return $this->firstname;
+    public function getFirstName(): string {
+        return $this->firstName;
     }
 
     /**
-     * Set the value of firstname
+     * Set the value of firstName
      *
-     * @param string $firstname
+     * @param string $firstName
      *
      * @return self
      */
-    public function setFirstname(string $firstname): self {
-        $this->firstname = $firstname;
+    public function setFirstName(string $firstName): self {
+        $this->firstName = $firstName;
         return $this;
     }
 
     /**
-     * Get the value of lastname
+     * Get the value of lastName
      *
      * @return string
      */
-    public function getLastname(): string {
-        return $this->lastname;
+    public function getLastName(): string {
+        return $this->lastName;
     }
 
     /**
-     * Set the value of lastname
+     * Set the value of lastName
      *
-     * @param string $lastname
+     * @param string $lastName
      *
      * @return self
      */
-    public function setLastname(string $lastname): self {
-        $this->lastname = $lastname;
+    public function setLastName(string $lastName): self {
+        $this->lastName = $lastName;
         return $this;
     }
 
@@ -116,8 +111,48 @@ class User {
      *
      * @return self
      */
-    public function setPassword(string $password): self {
-        $this->password = $password;
+    public function setPassword(string $password, string $verifyPassword): self {
+        if ($password !== $verifyPassword) {
+            throw new Exception ('Vos mots de passe sont différent');
+        }
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $this->password = $hashedPassword;
         return $this;
     }
+
+    // METHODS
+    public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, int $phoneNumber):void {
+        $this->setFirstName($firstname);
+        $this->setLastName($lastname);
+        $this->setEmail($email);
+        $this->setPassword($password, $verifyPassword);
+        $this->setPhoneNumber($phoneNumber);
+    }
+
+    public function insertUser():void {
+        $query = "INSERT INTO user(firstname, lastname, phoneNumber, email, `password`) VALUES (:firstname, :lastname, :phoneNumber, :email, :password)";
+        $statement = $this->getPdo()->prepare($query);
+        $statement->bindValue(':firstname', $this->getFirstname(), \PDO::PARAM_STR);
+        $statement->bindValue(':lastname', $this->getLastname(), \PDO::PARAM_STR);
+        $statement->bindValue(':phoneNumber', $this->getPhoneNumber(), \PDO::PARAM_INT);
+        $statement->bindValue(':email', $this->getEmail(), \PDO::PARAM_STR);
+        $statement->bindValue(':password', $this->getPassword(), \PDO::PARAM_STR);
+        $statement->execute();
+    }
+
+    public function getUser(string $email, string $password) {
+        $query = "SELECT password FROM user WHERE email = :email";
+        $statement = $this->getPdo()->prepare($query);
+        $statement->bindValue(':email', $email, \PDO::PARAM_STR);
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        $passwordHash = $user['password'];
+        if (password_verify($password, $passwordHash)) {
+            return true; // Le mot de passe est valide
+        } else {
+            return false; // Le mot de passe est invalide
+        }
+    }
+
+
 }
