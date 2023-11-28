@@ -3,6 +3,12 @@ require_once('Database.php');
 
 class Booking
 {
+    private int $id;
+    private float $totalPrice;
+    private string $bookingDate;
+    private string $bookingStatus;
+    private int $quantity;
+
     private $pdo;
 
     //Instantiate PDO whehn class Booking is instanciated
@@ -37,6 +43,7 @@ class Booking
         $statement->bindParam(':movieid', $movie_id, PDO::PARAM_INT);
 
         $result = $statement->execute();
+        return $result;
 
         //Gets last inserted entry of booking
         if ($result) {
@@ -109,7 +116,7 @@ class Booking
     public function getPastBookings($user_id)
     {
         $currentDate = date('Y-m-d H:i:s');
-
+        //echo $currentDate; 
         $query = "SELECT b.*, m.title
                   FROM booking b
                   JOIN movie m ON b.movie_id = m.id
@@ -123,8 +130,15 @@ class Booking
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+    //Deletion function from booking
+    public function deleteBooking($booking_id)
+    {
+        $query = "DELETE FROM booking WHERE id = :bookingid";
+        $statement = $this->pdo->prepare($query);
+        $statement->bindParam(':bookingid', $booking_id, PDO::PARAM_INT);
 
-
+        return $statement->execute();
+    }
     //Requête pour l'admin plus tard 
     /*public function getAllBookings()
     {
@@ -133,4 +147,119 @@ class Booking
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }*/
+
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @param int $id
+     *
+     * @return self
+     */
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Get the value of totalPrice
+     *
+     * @return float
+     */
+    public function getTotalPrice(): float
+    {
+        return $this->totalPrice;
+    }
+
+    /**
+     * Set the value of totalPrice
+     *
+     * @param float $totalPrice
+     *
+     * @return self
+     */
+    public function setTotalPrice(float $totalPrice): self
+    {
+        $this->totalPrice = $totalPrice;
+        return $this;
+    }
+
+    /**
+     * Get the value of bookingDate
+     *
+     * @return string
+     */
+    public function getBookingDate(): string
+    {
+        return $this->bookingDate;
+    }
+
+    /**
+     * Set the value of bookingDate
+     *
+     * @param string $bookingDate
+     *
+     * @return self
+     */
+    public function setBookingDate(string $bookingDate): self
+    {
+        $this->bookingDate = $bookingDate;
+        return $this;
+    }
+
+    /**
+     * Get the value of bookingStatus
+     *
+     * @return string
+     */
+    public function getBookingStatus(): string
+    {
+        return $this->bookingStatus;
+    }
+
+    /**
+     * Set the value of bookingStatus
+     *
+     * @param string $bookingStatus
+     *
+     * @return self
+     */
+    public function setBookingStatus(string $bookingStatus): self
+    {
+        $this->bookingStatus = $bookingStatus;
+        return $this;
+    }
+
+    /**
+     * Get the value of quantity
+     *
+     * @return int
+     */
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set the value of quantity
+     *
+     * @param int $quantity
+     *
+     * @return self
+     */
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+        return $this;
+    }
 }
