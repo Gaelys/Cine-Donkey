@@ -86,6 +86,43 @@ class Booking
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+    //Function to get current bookings
+
+    public function getCurrentBookings($user_id)
+    {
+        $currentDate = date('Y-m-d H:i:s');
+
+        $query = "SELECT b.*, m.title
+                  FROM booking b
+                  JOIN movie m ON b.movie_id = m.id
+                  WHERE b.user_id = :userid AND b.bookingDate > :currentdate
+                  ORDER BY b.bookingDate";
+
+        $statement = $this->pdo->prepare($query);
+        $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
+        $statement->bindParam(':currentdate', $currentDate, PDO::PARAM_STR);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    //Function to get past bookings
+    public function getPastBookings($user_id)
+    {
+        $currentDate = date('Y-m-d H:i:s');
+
+        $query = "SELECT b.*, m.title
+                  FROM booking b
+                  JOIN movie m ON b.movie_id = m.id
+                  WHERE b.user_id = :userid AND b.bookingDate <= :currentdate
+                  ORDER BY b.bookingDate";
+
+        $statement = $this->pdo->prepare($query);
+        $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
+        $statement->bindParam(':currentdate', $currentDate, PDO::PARAM_STR);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
     //Requête pour l'admin plus tard 
