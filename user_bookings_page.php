@@ -2,15 +2,17 @@
 require_once(__DIR__ . '/src/Booking.php');
 session_start();
 
-var_dump($_SESSION);
-var_dump($_SESSION);
+
+$userId = $_SESSION['idUser'];
+//var_dump($userId);
+
 $user_bookings = new Booking();
-$currentBookings = $user_bookings->getCurrentBookings(1); //Récupération de l'id du user connecté une fois ceci est géré en session
-$pastBookings = $user_bookings->getPastBookings(1); //Récupération de l'id du user connecté une fois ceci est géré en session
+$currentBookings = $user_bookings->getCurrentBookings($userId); //Récupération de l'id du user connecté une fois ceci est géré en session
+$pastBookings = $user_bookings->getPastBookings($userId); //Récupération de l'id du user connecté une fois ceci est géré en session
 $showDate = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
 $showTime = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
 $showTime = 'Placeholder';
-var_dump($pastBookings);
+//var_dump($pastBookings);
 ?>
 
 <div>
