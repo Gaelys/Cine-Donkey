@@ -8,6 +8,7 @@ if (!empty($_POST)) {
     $user->insertUser();
     session_start();
     $_SESSION['user'] = $user->getEmail();
+    $_SESSION['idUser'] = $user->getIdUser($_SESSION['user']);
     header ('Location: index.php');
     die;
 }
