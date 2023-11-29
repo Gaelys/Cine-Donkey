@@ -9,6 +9,7 @@ class Cart
         }
     }
 
+    //The movie's ID  will be whatever will be the movie id catched in the $_POST sent by user while he clicks on 'Réserver' in the movie detail page 
     public function addMovie($idMovie, $quantity)
     {
         if (isset($_SESSION['cart'][$idMovie])) {
