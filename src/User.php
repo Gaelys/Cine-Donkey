@@ -167,30 +167,16 @@ class User extends Database {
         $statement->execute();
     }
 
-    public function getUser(string $email, string $password) {
-        $query = "SELECT password FROM user WHERE email = :email";
+    public function getUser(string $email, string $password): array {
+        $query = "SELECT * FROM user WHERE email = :email";
         $statement = $this->getPdo()->prepare($query);
         $statement->bindValue(':email', $email, \PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
         $passwordHash = $user['password'];
         if (password_verify($password, $passwordHash)) {
-            return true; // Le mot de passe est valide
-        } else {
-            return false; // Le mot de passe est invalide
+            return $user;
         }
     }
-    
-    public function getIdUser(string $email) {
-        $query = "SELECT id FROM user WHERE email = :email";
-        $statement = $this->getPdo()->prepare($query);
-        $statement->bindValue(':email', $email, \PDO::PARAM_STR);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        $idUser = $result['id'];
-        return $idUser;
-    }
-
-
 
 }

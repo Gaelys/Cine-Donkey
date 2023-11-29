@@ -1,4 +1,6 @@
 <?php 
+$title = 'Inscription';
+require_once 'templates/head.php';
 require_once 'src\User.php';
 
 if (!empty($_POST)) {
@@ -6,9 +8,9 @@ if (!empty($_POST)) {
     $user = new User();
     $user->initialiseUser($post['firstname'], $post['lastname'], $post['email'], $post['password'],$post['verifyPassword'], $post['phoneNumber']);
     $user->insertUser();
-    session_start();
-    $_SESSION['user'] = $user->getEmail();
-    $_SESSION['idUser'] = $user->getIdUser($_SESSION['user']);
+    $info = $user->getUser($post['email'], $post['password']);
+    $_SESSION['user'] = $info['firstname'];
+    $_SESSION['idUser'] = $info['id'];
     header ('Location: index.php');
     die;
 }
@@ -45,3 +47,6 @@ if (!empty($_POST)) {
         <button type="submit">Inscription</button>
     </div>
 </form>
+
+<?php 
+require_once 'templates/footer.php';
