@@ -13,7 +13,7 @@ if (!empty($_POST)) {
     if ($initSession !== true) {
         throw new Exception ('Compte inexistant');
     }
-    $_session['user'] = $post['email'];
+    $_SESSION['user'] = $post['email'];
     header ('Location: index.php');
     die;
 }
