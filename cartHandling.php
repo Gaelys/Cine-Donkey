@@ -16,9 +16,8 @@ if (isset($_POST['removeFromCart'])) {
     $cart->removeMovie($movieId);
 }
 $cartContent = $cart->displayCart();
-var_dump($cart);
+var_dump($cartContent);
 ?>
-
 
 <h2>Votre Panier</h2>
 
@@ -26,13 +25,22 @@ var_dump($cart);
     <?php foreach ($cartContent as $movieId => $quantity) : ?>
         <tr>
             <td><?= $movieId ?></td>
-            <td><?= $quantity ?></td>
+            <td><a href="">+<a><?= $quantity ?><a href="">-<a></td>
             <td>
                 <form method="post" action="">
-                    <input type="hidden" name="film_id" value="<?= $movieId ?>">
+                    <input type="hidden" name="movieId" value="<?= $movieId ?>">
                     <button type="submit" name="remove">Supprimer</button>
                 </form>
             </td>
         </tr>
-    <?php endforeach; ?>
+    <?php endforeach;
+    if (!empty($cartContent)) : ?>
+        <tr>
+            <td>
+                <form method="post" action="">
+                    <button type="submit" name="create_booking">Confirmer ma commande</button>
+                </form>
+            </td>
+        </tr>
+    <?php endif; ?>
 </table>
