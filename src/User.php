@@ -2,6 +2,7 @@
 require_once 'Database.php';
 
 class User extends Database {
+    private int $id;
     private string $firstName;
     private string $lastName;
     private int $phoneNumber;
@@ -10,6 +11,27 @@ class User extends Database {
 
     
     //GETTERS AND SETTERS
+
+    /**
+     * Get the value of id
+     *
+     * @return int
+     */
+    public function getId(): int {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @param int $id
+     *
+     * @return self
+     */
+    public function setId(int $id): self {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * Get the value of firstName
@@ -111,6 +133,12 @@ class User extends Database {
      *
      * @return self
      */
+    
+
+    
+    
+    // METHODS
+
     public function setPassword(string $password, string $verifyPassword): self {
         if ($password !== $verifyPassword) {
             throw new Exception ('Vos mots de passe sont différent');
@@ -120,7 +148,6 @@ class User extends Database {
         return $this;
     }
 
-    // METHODS
     public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, int $phoneNumber):void {
         $this->setFirstName($firstname);
         $this->setLastName($lastname);
@@ -153,6 +180,17 @@ class User extends Database {
             return false; // Le mot de passe est invalide
         }
     }
+    
+    public function getIdUser(string $email) {
+        $query = "SELECT id FROM user WHERE email = :email";
+        $statement = $this->getPdo()->prepare($query);
+        $statement->bindValue(':email', $email, \PDO::PARAM_STR);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $idUser = $result['id'];
+        return $idUser;
+    }
+
 
 
 }
