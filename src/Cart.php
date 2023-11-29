@@ -33,6 +33,6 @@ class Cart
     public function displayCart()
     {
 
-        return $_SESSION['panier'];
+        return $_SESSION['cart'];
     }
 }
