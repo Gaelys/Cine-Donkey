@@ -5,12 +5,23 @@ class User extends Database {
     private int $id;
     private string $firstName;
     private string $lastName;
-    private int $phoneNumber;
+    private string $phoneNumber;
     private string $email;
     private string $password;
-
+    private array $errors = [];  //
     
     //GETTERS AND SETTERS
+    // Méthode pour ajouter une erreur
+    public function addError(string $key, string $message): void {
+        if (!array_key_exists($key, $this->errors)) {
+            $this->errors[$key] = $message;
+        }
+    }
+
+    // Méthode pour récupérer toutes les erreurs
+    public function getErrors(): array {
+        return $this->errors;
+    }
 
     /**
      * Get the value of id
@@ -50,6 +61,9 @@ class User extends Database {
      * @return self
      */
     public function setFirstName(string $firstName): self {
+        if (is_numeric($firstName) || $firstName === '') {
+            $this->addError('firstname', 'Votre Prénom est obligatoire.');
+        }
         $this->firstName = $firstName;
         return $this;
     }
@@ -71,6 +85,9 @@ class User extends Database {
      * @return self
      */
     public function setLastName(string $lastName): self {
+        if (is_numeric($lastName) || $lastName === '') {
+            $this->addError('name', 'Votre nom est obligatoire.');
+        }
         $this->lastName = $lastName;
         return $this;
     }
@@ -78,22 +95,26 @@ class User extends Database {
     /**
      * Get the value of phoneNumber
      *
-     * @return INT
+     * @return string
      */
-    public function getPhoneNumber(): INT {
+    public function getPhoneNumber(): string{
         return $this->phoneNumber;
     }
 
     /**
      * Set the value of phoneNumber
      *
-     * @param INT $phoneNumber
+     * @param string $phoneNumber
      *
      * @return self
      */
-    public function setPhoneNumber(INT $phoneNumber): self {
+    public function setPhoneNumber(string $phoneNumber): self {
+        if ($phoneNumber !== '' && (!is_numeric($phoneNumber) || strlen($phoneNumber) !== 10)) {
+            $this->addError('phoneNumber', 'Votre numéro de téléphone n\'est pas au format souhaité.');
+        }
         $this->phoneNumber = $phoneNumber;
         return $this;
+        
     }
 
     /**
@@ -113,10 +134,17 @@ class User extends Database {
      * @return self
      */
     public function setEmail(string $email): self {
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addError('email', 'Votre adresse email n\'est pas valide.');
+        }
+        $allUserEmail = $this->getAllEmail();
+        if (in_array($email, $allUserEmail)) {
+            $this->addError('email', 'Compte .');
+        }
         $this->email = $email;
         return $this;
     }
-
+    
     /**
      * Get the value of password
      *
@@ -133,22 +161,19 @@ class User extends Database {
      *
      * @return self
      */
-    
-
-    
-    
-    // METHODS
-
     public function setPassword(string $password, string $verifyPassword): self {
-        if ($password !== $verifyPassword) {
-            throw new Exception ('Vos mots de passe sont différent');
+        if ($password !== $verifyPassword || $password ==='' || $verifyPassword === '') {
+            $this->addError('passwordsame', 'Vos mots de passe sont différent ou vide');
         }
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $this->password = $hashedPassword;
         return $this;
     }
 
-    public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, int $phoneNumber):void {
+    
+    // METHODS
+
+    public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, string $phoneNumber):void {
         $this->setFirstName($firstname);
         $this->setLastName($lastname);
         $this->setEmail($email);
@@ -161,7 +186,7 @@ class User extends Database {
         $statement = $this->getPdo()->prepare($query);
         $statement->bindValue(':firstname', $this->getFirstname(), \PDO::PARAM_STR);
         $statement->bindValue(':lastname', $this->getLastname(), \PDO::PARAM_STR);
-        $statement->bindValue(':phoneNumber', $this->getPhoneNumber(), \PDO::PARAM_INT);
+        $statement->bindValue(':phoneNumber', $this->getPhoneNumber(), \PDO::PARAM_STR);
         $statement->bindValue(':email', $this->getEmail(), \PDO::PARAM_STR);
         $statement->bindValue(':password', $this->getPassword(), \PDO::PARAM_STR);
         $statement->execute();
@@ -173,10 +198,21 @@ class User extends Database {
         $statement->bindValue(':email', $email, \PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
+        if (empty($user)) {
+            throw new Exception ("Email ou mot de passe invalide");
+        }
         $passwordHash = $user['password'];
         if (password_verify($password, $passwordHash)) {
             return $user;
         }
+        throw new Exception ("Email ou mot de passe invalide");
+    }
+
+    public function getAllEmail(): array {
+        $query = "SELECT email FROM user ";
+        $statement = $this->getPdo()->query($query);
+        $user = $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $user;
     }
 
 }
