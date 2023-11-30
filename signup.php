@@ -5,7 +5,9 @@ require_once 'src\User.php';
 
 if (!empty($_SESSION['idUser'])) {
     ?>
-    <div> Vous possédez déjà un compte.</div>
+    <div class="mt-5 offset-4">
+            <h3 class="offset-1">Vous possedez déjà un compte.</h3>
+    </div>
     <?php
 } else {
     if (!empty($_POST)) {
@@ -19,7 +21,15 @@ if (!empty($_SESSION['idUser'])) {
         $errors = $user->getErrors();
         if (!empty($errors)) {
             foreach ($errors as $error) {
-                echo "<p>Erreur : " . $error . "</p>";
+                ?>
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <strong>Oh zut!</strong>
+                    <?php
+                    echo ": " . $error;
+                    ?>
+                </div>
+                <?php
             }
         } else {
             $user->insertUser();
@@ -33,37 +43,37 @@ if (!empty($_SESSION['idUser'])) {
 
     ?>
 
-
-    <form method="post">
-        <div>
-            <label for="firstname">Mon Prénom : </label>
-            <input type="text" id="firstname" name="firstname"/>
-        </div>
-        <div>
-            <label for="lastname">Mon Nom de famille</label>
-            <input type="text" id="lastname" name="lastname"/>
-        </div>
-        <div>
-            <label for="phoneNumber">Mon Téléphone : </label>
-            <input type="tel" id="phoneNumber" name="phoneNumber"/>
-        </div>
-        <div>
-            <label for="email">Mon Adresse email : </label>
-            <input type="email" id="email" name="email" />
-        </div>
-        <div>
-            <label for="password">Mon Mot de passe : </label>
-            <input type="password" id="password" name="password"/>
-        </div>
-        <div>
-            <label for="verifyPassword">Confirmer votre mot de passe : </label>
-            <input type="password" id="verifyPassword" name="verifyPassword"/>
-        </div>
-        <div>
-            <button type="submit">Inscription</button>
-        </div>
-    </form>
-
+    <div class="container mt-5 col-sm-4">
+        <form method="post">
+            <div  class="form-group">
+                <label class="form-label" for="firstname">Mon Prénom : </label>
+                <input class="form-control" type="text" id="firstname" name="firstname"/>
+            </div>
+            <div  class="form-group  mt-4">
+                <label class="form-label" for="lastname">Mon Nom de famille</label>
+                <input class="form-control" type="text" id="lastname" name="lastname"/>
+            </div>
+            <div  class="form-group  mt-4">
+                <label class="form-label" for="phoneNumber">Mon Téléphone : </label>
+                <input class="form-control" type="tel" id="phoneNumber" name="phoneNumber"/>
+            </div>
+            <div  class="form-group  mt-4">
+                <label class="form-label" for="email">Mon Adresse email : </label>
+                <input class="form-control" type="email" id="email" name="email" />
+            </div>
+            <div  class="form-group  mt-4">
+                <label class="form-label" for="password">Mon Mot de passe : </label>
+                <input class="form-control" type="password" id="password" name="password"/>
+            </div>
+            <div  class="form-group  mt-4">
+                <label class="form-label" for="verifyPassword">Confirmer votre mot de passe : </label>
+                <input class="form-control" type="password" id="verifyPassword" name="verifyPassword"/>
+            </div>
+            <div class="mt-4 offset-4">
+                <button class="mt-4 btn btn-secondary offset-1"type="submit">Inscription</button>
+            </div>
+        </form>
+    </div>
 <?php 
 }
 require_once 'templates/footer.php';
