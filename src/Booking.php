@@ -131,7 +131,7 @@ class Booking
                   JOIN movie m ON b.movie_id = m.id
                   WHERE b.user_id = :userid AND b.bookingDate > :currentdate
                   ORDER BY b.bookingDate";
-
+    
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
             $statement->bindParam(':currentdate', $currentDate, PDO::PARAM_STR);

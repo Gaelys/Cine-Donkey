@@ -1,8 +1,10 @@
 <?php
-session_start();
 require_once(__DIR__ . '/src/Cart.php');
 
+$title = 'Panier';
+require_once 'templates/head.php';
 $cart = new Cart;
+$cart->addMovie(2, 3);
 /*************All $_POST contents are waiting for the movie detail page to be  done . Sene! Remember to rename ++++++++******/
 //Waiting for the + button on quantity to be held in movie detail page
 if (isset($_POST['addToCart'])) {
@@ -15,6 +17,7 @@ if (isset($_POST['removeFromCart'])) {
     $movieId = $_POST['movieId'];
     $cart->removeMovie($movieId);
 }
+
 $cartContent = $cart->displayCart();
 var_dump($cartContent);
 ?>
@@ -44,3 +47,5 @@ var_dump($cartContent);
         </tr>
     <?php endif; ?>
 </table>
+<?php
+require_once 'templates/footer.php';

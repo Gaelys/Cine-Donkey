@@ -1,7 +1,8 @@
 <?php
 require_once(__DIR__ . '/src/Booking.php');
-session_start();
+require_once 'templates/head.php';
 
+$title = 'Mes réservations';
 
 $userId = $_SESSION['idUser'];
 //var_dump($userId);
@@ -11,7 +12,7 @@ $currentBookings = $user_bookings->getCurrentBookings($userId); //Récupération
 $pastBookings = $user_bookings->getPastBookings($userId); //Récupération de l'id du user connecté une fois ceci est géré en session
 $showDate = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
 $showTime = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
-$showTime = 'Placeholder';
+
 //var_dump($pastBookings);
 ?>
 
@@ -44,3 +45,5 @@ $showTime = 'Placeholder';
         <?php endforeach; ?>
     </div>
 </div>
+<?php
+require_once 'templates/footer.php';
