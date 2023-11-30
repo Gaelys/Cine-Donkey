@@ -4,20 +4,21 @@ require_once 'templates/head.php';
 require_once 'src\User.php';
 if (!empty($_SESSION['idUser'])) {
     ?>
-    <div> Vous êtes déja connecté</div>
+    <div> Vous êtes déjà connectés.</div>
     <?php
 } else {
     if (!empty($_POST)) {
         $post = $_POST;
         $user = new User();
+        try {
         $initSession = $user->getUser($post['email'], $post['password']);
-        if (empty($initSession)) {
-            throw new Exception ('Compte inexistant');
-        }
         $_SESSION['user'] = $initSession['firstname'];
         $_SESSION['idUser'] = $initSession['id'];
         header ('Location: index.php');
         die;
+        } catch (Exception $e) {
+            echo "Erreur : " . $e->getMessage();
+        }
     }
     ?>
 
