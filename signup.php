@@ -5,7 +5,7 @@ require_once 'src\User.php';
 
 if (!empty($_SESSION['idUser'])) {
     ?>
-    <div> Vous êtes déjà connectés</div>
+    <div> Vous possédez déjà un compte.</div>
     <?php
 } else {
     if (!empty($_POST)) {
