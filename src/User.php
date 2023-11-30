@@ -188,10 +188,14 @@ class User extends Database {
         $statement->bindValue(':email', $email, \PDO::PARAM_STR);
         $statement->execute();
         $user = $statement->fetch(PDO::FETCH_ASSOC);
+        if (empty($user)) {
+            throw new Exception ("Email ou mot de passe invalide");
+        }
         $passwordHash = $user['password'];
         if (password_verify($password, $passwordHash)) {
             return $user;
         }
+        throw new Exception ("Email ou mot de passe invalide");
     }
 
     public function getAllEmail(): array {

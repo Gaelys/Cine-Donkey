@@ -10,14 +10,15 @@ if (!empty($_SESSION['idUser'])) {
     if (!empty($_POST)) {
         $post = $_POST;
         $user = new User();
+        try {
         $initSession = $user->getUser($post['email'], $post['password']);
-        if (empty($initSession)) {
-            throw new Exception ('Compte inexistant');
-        }
         $_SESSION['user'] = $initSession['firstname'];
         $_SESSION['idUser'] = $initSession['id'];
         header ('Location: index.php');
         die;
+        } catch (Exception $e) {
+            echo "Erreur : " . $e->getMessage();
+        }
     }
     ?>
 
