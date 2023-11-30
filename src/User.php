@@ -5,7 +5,7 @@ class User extends Database {
     private int $id;
     private string $firstName;
     private string $lastName;
-    private int $phoneNumber;
+    private string $phoneNumber;
     private string $email;
     private string $password;
 
@@ -50,6 +50,9 @@ class User extends Database {
      * @return self
      */
     public function setFirstName(string $firstName): self {
+        if (is_numeric($firstName) || $firstName === '') {
+            throw new Exception ('Votre Prénom est obligatoire.');
+        }
         $this->firstName = $firstName;
         return $this;
     }
@@ -71,6 +74,9 @@ class User extends Database {
      * @return self
      */
     public function setLastName(string $lastName): self {
+        if (is_numeric($lastName) || $lastName === '') {
+            throw new Exception ('Votre nom est obligatoire.');
+        }
         $this->lastName = $lastName;
         return $this;
     }
@@ -78,22 +84,27 @@ class User extends Database {
     /**
      * Get the value of phoneNumber
      *
-     * @return INT
+     * @return string
      */
-    public function getPhoneNumber(): INT {
+    public function getPhoneNumber(): string{
         return $this->phoneNumber;
     }
 
     /**
      * Set the value of phoneNumber
      *
-     * @param INT $phoneNumber
+     * @param string $phoneNumber
      *
      * @return self
      */
-    public function setPhoneNumber(INT $phoneNumber): self {
+    public function setPhoneNumber(string $phoneNumber): self {
+        if (!is_numeric($phoneNumber) || ($phoneNumber !== '' && strlen($phoneNumber) != 10 )){
+            throw new Exception ('Votre numéro de téléphone n\'est pas au format souhaité.');
+            die;
+        }
         $this->phoneNumber = $phoneNumber;
         return $this;
+        
     }
 
     /**
@@ -113,6 +124,13 @@ class User extends Database {
      * @return self
      */
     public function setEmail(string $email): self {
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new Exception ('Votre adresse email n\'est pas valide.');    
+        }
+        $allUserEmail = $this->getAllEmail();
+        if (in_array($email, $allUserEmail)) {
+            throw new Exception ('Compte existant');
+        }
         $this->email = $email;
         return $this;
     }
@@ -133,12 +151,6 @@ class User extends Database {
      *
      * @return self
      */
-    
-
-    
-    
-    // METHODS
-
     public function setPassword(string $password, string $verifyPassword): self {
         if ($password !== $verifyPassword) {
             throw new Exception ('Vos mots de passe sont différent');
@@ -148,7 +160,10 @@ class User extends Database {
         return $this;
     }
 
-    public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, int $phoneNumber):void {
+    
+    // METHODS
+
+    public function initialiseUser(string $firstname, string $lastname, string $email, string $password,string $verifyPassword, string $phoneNumber):void {
         $this->setFirstName($firstname);
         $this->setLastName($lastname);
         $this->setEmail($email);
@@ -161,7 +176,7 @@ class User extends Database {
         $statement = $this->getPdo()->prepare($query);
         $statement->bindValue(':firstname', $this->getFirstname(), \PDO::PARAM_STR);
         $statement->bindValue(':lastname', $this->getLastname(), \PDO::PARAM_STR);
-        $statement->bindValue(':phoneNumber', $this->getPhoneNumber(), \PDO::PARAM_INT);
+        $statement->bindValue(':phoneNumber', $this->getPhoneNumber(), \PDO::PARAM_STR);
         $statement->bindValue(':email', $this->getEmail(), \PDO::PARAM_STR);
         $statement->bindValue(':password', $this->getPassword(), \PDO::PARAM_STR);
         $statement->execute();
@@ -177,6 +192,13 @@ class User extends Database {
         if (password_verify($password, $passwordHash)) {
             return $user;
         }
+    }
+
+    public function getAllEmail(): array {
+        $query = "SELECT email FROM user ";
+        $statement = $this->getPdo()->query($query);
+        $user = $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $user;
     }
 
 }

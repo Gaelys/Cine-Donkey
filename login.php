@@ -4,7 +4,7 @@ require_once 'templates/head.php';
 require_once 'src\User.php';
 if (!empty($_SESSION['idUser'])) {
     ?>
-    <div> Vous êtes déja connecté</div>
+    <div> Vous êtes déjà connectés</div>
     <?php
 } else {
     if (!empty($_POST)) {
