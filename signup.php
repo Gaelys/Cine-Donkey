@@ -43,30 +43,30 @@ if (!empty($_SESSION['idUser'])) {
 
     ?>
 
-    <div class="container mt-3 col-sm-4">
+    <div class="container col-sm-4">
         <form method="post">
             <div  class="form-group">
                 <label class="form-label" for="lastname">Nom : </label>
                 <input class="form-control" type="text" id="lastname" name="lastname" placeholder="Nom"/>
             </div>
-            <div  class="form-group mt-4">
+            <div  class="form-group mt-3">
                 <label class="form-label" for="firstname">Prénom : </label>
                 <input class="form-control" type="text" id="firstname" name="firstname" placeholder="Prénom"/>
             </div>
             
-            <div  class="form-group  mt-4">
+            <div  class="form-group  mt-3">
                 <label class="form-label" for="phoneNumber">Téléphone : </label>
                 <input class="form-control" type="tel" id="phoneNumber" name="phoneNumber" placeholder="n° de téléphone"/>
             </div>
-            <div  class="form-group  mt-4">
+            <div  class="form-group  mt-3">
                 <label class="form-label" for="email">Adresse email : </label>
                 <input class="form-control" type="email" id="email" name="email" placeholder="Adresse email" />
             </div>
-            <div  class="form-group  mt-4">
+            <div  class="form-group  mt-3">
                 <label class="form-label" for="password">Mot de passe : </label>
                 <input class="form-control" type="password" id="password" name="password" placeholder="Mot de passe"/>
             </div>
-            <div  class="form-group  mt-4">
+            <div  class="form-group  mt-3">
                 <label class="form-label" for="verifyPassword">Confirmer mon mot de passe : </label>
                 <input class="form-control" type="password" id="verifyPassword" name="verifyPassword" placeholder="Mot de passe"/>
             </div>
@@ -78,6 +78,7 @@ if (!empty($_SESSION['idUser'])) {
             <a class="ml-2 text-secondary" href="login.php">J'ai déjà un compte</a>
         </div>
     </div>
+
 <?php 
 }
 require_once 'templates/footer.php';
