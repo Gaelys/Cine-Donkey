@@ -33,17 +33,20 @@ if (!empty($_SESSION['idUser'])) {
     <div class="container mt-5 col-sm-4">
         <form method="post">
             <div class="form-group">
-                <label class="form-label" for="email">Mon Adresse email : </label>
-                <input class="form-control" type="email" id="email" name="email" />
+                <label class="form-label" for="email">Adresse email : </label>
+                <input class="form-control" type="email" id="email" name="email" placeholder="Adresse email"/>
             </div>
             <div class="form-group mt-5">
-                <label class="form-label" for="password">Mon Mot de passe : </label>
-                <input class="form-control" type="password" id="password" name="password"/>
+                <label class="form-label" for="password">Mot de passe : </label>
+                <input class="form-control" type="password" id="password" name="password" placeholder="Mot de passe"/>
             </div>
-            <div class="offset-4 mt-5">
-                <button class="offset-1 btn btn-warning" type="submit">Se Connecter</button>
+            <div class="offset-3 mt-5">
+                <button class="btn btn-warning offset-2" type="submit">Se Connecter</button>
             </div>
         </form>
+        <div class="offset-3 mt-4">
+            <a class="ml-2 text-warning offset-1" href="signup.php">Je n'ai pas encore de compte</a>
+        </div>
     </div>
     <?php
 }
