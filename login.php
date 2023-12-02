@@ -1,4 +1,4 @@
-<?php 
+<?php
 $title = 'Se Connecter';
 require_once 'templates/head.php';
 require_once 'src\User.php';
@@ -11,11 +11,14 @@ if (!empty($_SESSION['idUser'])) {
         $post = $_POST;
         $user = new User();
         try {
-            $initSession = $user->getUser($post['email'], $post['password']);
-            $_SESSION['user'] = $initSession['firstname'];
-            $_SESSION['idUser'] = $initSession['id'];
-            header ('Location: index.php');
-            die;
+        $initSession = $user->getUser($post['email'], $post['password']);
+        if (empty($initSession)) {
+            throw new Exception('Compte inexistant');
+        }
+        $_SESSION['user'] = $initSession['firstname'];
+        $_SESSION['idUser'] = $initSession['id'];
+        header('Location: index.php');
+        die;
         } catch (Exception $e) {
             ?>
             <div class="alert alert-dismissible alert-danger">
@@ -28,7 +31,7 @@ if (!empty($_SESSION['idUser'])) {
             <?php
         }
     }
-    ?>
+?>
 
     <div class="container mt-5 col-sm-4">
         <form method="post">
@@ -47,7 +50,15 @@ if (!empty($_SESSION['idUser'])) {
         <div class="offset-3 mt-4">
             <a class="ml-2 text-warning offset-1" href="signup.php">Je n'ai pas encore de compte</a>
         </div>
-    </div>
-    <?php
+        <div>
+            <label for="password">Mon Mot de passe : </label>
+            <input type="password" id="password" name="password" />
+        </div>
+        <div>
+            <button type="submit">Se Connecter</button>
+        </div>
+    </form>
+
+<?php
 }
 require_once 'templates/footer.php';
