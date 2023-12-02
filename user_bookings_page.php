@@ -1,8 +1,9 @@
 <?php
 require_once(__DIR__ . '/src/Booking.php');
+$title = 'Mes réservations';
+
 require_once 'templates/head.php';
 
-$title = 'Mes réservations';
 
 $userId = $_SESSION['idUser'];
 //var_dump($userId);

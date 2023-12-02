@@ -29,7 +29,7 @@ class Booking
     {
         try {
             $bookingDate = date('Y-m-d H:i:s');
-            $bookingStatus = 'Confirmé';
+            $bookingStatus = 'En attente de confirmation';
 
             $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_has_showdate_and_showtime_id) 
                       VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid)";
@@ -54,6 +54,38 @@ class Booking
             return "Error: " . $e->getMessage();
         }
     }
+    /**********************To get cart bookings**************************/
+    public function getPendingBookings($user_id)
+    {
+        $query = "SELECT b.*, m.title
+        FROM booking b
+        JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
+        JOIN movie m ON mhsds.movie_id = m.id
+        WHERE b.user_id = :userid AND b.bookingStatus = 'En attente de confirmation'
+        ORDER BY b.bookingDate";
+
+        $statement = $this->pdo->prepare($query);
+        $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    /**********************To change booking status to confirmed**************************/
+    public function confirmBooking($booking_id)
+    {
+        try {
+            $query = "UPDATE booking SET bookingStatus = 'Confirmé' WHERE id = :bookingid";
+            $statement = $this->pdo->prepare($query);
+            $statement->bindParam(':bookingid', $booking_id, PDO::PARAM_INT);
+
+            $result = $statement->execute();
+
+            return $result;
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la confirmation du panier : " . $e->getMessage());
+        }
+    }
+
     /**********************To get a single booking  if needed**************************/
     public function getBookingById($booking_id)
     {
@@ -78,11 +110,11 @@ class Booking
     {
         try {
             $query = "SELECT b.*, m.title
-              FROM booking b
-              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-              JOIN movie m ON mhsds.movie_id = m.id
-              WHERE b.user_id = :userid 
-              ORDER BY b.bookingDate";
+          FROM booking b
+          JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
+          JOIN movie m ON mhsds.movie_id = m.id
+          WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée'
+          ORDER BY b.bookingDate";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
@@ -91,22 +123,22 @@ class Booking
             if ($statement->rowCount() > 0) {
                 return $statement->fetchAll(PDO::FETCH_ASSOC);
             } else {
-                throw new Exception("Aucune réservation trouvée pour l'utilisateur $user_id");
+                throw new Exception("Aucune réservation confirmée trouvée pour l'utilisateur $user_id");
             }
         } catch (Exception $e) {
-            return "Erreur lors du tri des réservations par date : " . $e->getMessage();
+            return "Erreur lors du tri des réservations confirmées par date : " . $e->getMessage();
         }
     }
 
-    /**********************Allowing  user to search his bookings by movie title**************************/
+    /**********************Allowing user to search his confirmed bookings by movie title**************************/
     public function getBookingsByMovieTitle($user_id, $movieTitle)
     {
         try {
             $query = "SELECT b.*
-              FROM booking b
-              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-              JOIN movie m ON mhsds.movie_id = m.id
-              WHERE b.user_id = :userid AND m.title LIKE :movietitle";
+          FROM booking b
+          JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
+          JOIN movie m ON mhsds.movie_id = m.id
+          WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND m.title LIKE :movietitle";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
@@ -115,22 +147,22 @@ class Booking
 
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            throw new Exception("Erreur lors de la récupération des réservations par titre de film : " . $e->getMessage());
+            throw new Exception("Erreur lors de la récupération des réservations confirmées par titre de film : " . $e->getMessage());
         }
     }
-    /**********************Function to get current bookings**************************/
 
+    /**********************Function to get current confirmed bookings**************************/
     public function getCurrentBookings($user_id)
     {
         try {
             $currentDate = date('Y-m-d H:i:s');
 
             $query = "SELECT b.*, m.title
-                  FROM booking b
-                  JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-                  JOIN movie m ON mhsds.movie_id = m.id
-                  WHERE b.user_id = :userid AND b.bookingDate > :currentdate
-                  ORDER BY b.bookingDate";
+              FROM booking b
+              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
+              JOIN movie m ON mhsds.movie_id = m.id
+              WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate > :currentdate
+              ORDER BY b.bookingDate";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
@@ -141,22 +173,22 @@ class Booking
 
             return $result;
         } catch (Exception $e) {
-            throw new Exception("Erreur lors de la récupération des réservations en cours : " . $e->getMessage());
+            throw new Exception("Erreur lors de la récupération des réservations confirmées en cours : " . $e->getMessage());
         }
     }
 
-    /**********************Function to get past bookings**************************/
+    /**********************Function to get past confirmed bookings**************************/
     public function getPastBookings($user_id)
     {
         try {
             $currentDate = date('Y-m-d H:i:s');
 
             $query = "SELECT b.*, m.title
-                  FROM booking b
-                  JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-                  JOIN movie m ON mhsds.movie_id = m.id
-                  WHERE b.user_id = :userid AND b.bookingDate <= :currentdate
-                  ORDER BY b.bookingDate";
+              FROM booking b
+              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
+              JOIN movie m ON mhsds.movie_id = m.id
+              WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate <= :currentdate
+              ORDER BY b.bookingDate";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
@@ -167,9 +199,10 @@ class Booking
 
             return $result;
         } catch (Exception $e) {
-            throw new Exception("Erreur lors de la récupération des réservations passées : " . $e->getMessage());
+            throw new Exception("Erreur lors de la récupération des réservations confirmées passées : " . $e->getMessage());
         }
     }
+
     /**********************Deletion function from booking**************************/
     public function deleteBooking($booking_id)
     {

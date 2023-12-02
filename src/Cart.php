@@ -1,5 +1,6 @@
-<?php
 
+<?php
+/* Ce code n'a aucun interêt si le cart n'est pas géré en session*****************
 class Cart
 {
     public function __construct()
@@ -36,3 +37,4 @@ class Cart
         return $_SESSION['cart'];
     }
 }
+*/
