@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href=/../public/css/bootstrap.min.css />
-    <link rel="stylesheet" href="/../public/css/style.css" />
-    <title><?php echo $title; ?></title>
-</head>
-
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href=/../public/css/bootstrap.min.css />      
+        <link rel="stylesheet" href="/../public/css/style.css"/>
+        <title><?php echo $title; ?></title>
+    </head>
+    <body>
+        <header>
+        <nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="dark">
             <?php session_start();
             ?>
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarColor01">
+                    <img src="/../public/uploads/images/Logo Cine-Donkey.png"/>
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <div class="nav-link">Bienvenue</div>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link <?php echo $title === 'Accueil' ? 'active' : '' ?>" href="index.php">Accueil</a>
                         </li>
