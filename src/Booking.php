@@ -74,7 +74,7 @@ class Booking
     public function confirmBooking($booking_id)
     {
         try {
-            $query = "UPDATE booking SET bookingStatus = 'Confirmé' WHERE id = :bookingid";
+            $query = "UPDATE booking SET bookingStatus = 'Confirmée' WHERE id = :bookingid";
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':bookingid', $booking_id, PDO::PARAM_INT);
 
