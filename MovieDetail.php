@@ -43,6 +43,7 @@ var_dump($allshowtimes);
 </div> 
 <form action="Essaie.php" method="POST">
 <input name="id film " type="hidden" value="<?php echo $movieID;?>">
+
 <div>
 <label for="date">Date de visionnage : </label>
 <select name="date" id="date">
@@ -51,13 +52,14 @@ var_dump($allshowtimes);
      <?php endforeach ?>
 </select>
 
-<label for="time"> Horaires : </label>
-<select name="time" id="time">
-    <?php foreach ($allshowtimes as $allshowtime): ?>
-    <option value="<?php echo $allshowtime['showTime_id'];?>"><?php echo $allshowtime['showTime'] ?></option>
-     <?php endforeach ?>
-</select>
 
+<select name="quantity" id="quantity">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            
+          </select>
 <input type="submit" value="Envoyer">
 
 </div>

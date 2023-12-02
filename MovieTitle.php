@@ -18,7 +18,7 @@ $allTitles = $movieRepository->getMovieTitle();
             <?php foreach ($allTitles as $allTitle):?>
                 
                
-                <tr class="d-flex">
+                <tr>
                     
                     <td><img src="<?php echo $allTitle["imagePath"];?>" width="160em" height="250e"/></td>
                     <td> <?php echo $allTitle ["title"]; ?></td>
