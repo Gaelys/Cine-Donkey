@@ -6,23 +6,23 @@ require_once  'Database.php';
 
 class MovieRepository {
     
-    public function createBooking($user_id, $movie_has_showdate_and_showtime_id, $totalPrice, $quantity)
-    {
+    // public function createBooking($user_id, $movie_has_showdate_and_showtime_id, $totalPrice, $quantity)
+    // {
 
-    $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_has_showdate_and_showtime_id) 
-                      VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid)";
+    // $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_has_showdate_and_showtime_id) 
+    //                   VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid)";
 
-            $statement = $this->pdo->prepare($query);
+    //         $statement = $this->pdo->prepare($query);
 
-            $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
-            $statement->bindParam(':totalprice', $totalPrice, PDO::PARAM_STR);
-            $statement->bindParam(':bookingdate', $bookingDate, PDO::PARAM_STR);
-            $statement->bindParam(':bookingstatus', $bookingStatus, PDO::PARAM_STR);
-            $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-            $statement->bindParam(':moviehasid', $movie_has_showdate_and_showtime_id, PDO::PARAM_INT);
+    //         $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
+    //         $statement->bindParam(':totalprice', $totalPrice, PDO::PARAM_STR);
+    //         $statement->bindParam(':bookingdate', $bookingDate, PDO::PARAM_STR);
+    //         $statement->bindParam(':bookingstatus', $bookingStatus, PDO::PARAM_STR);
+    //         $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+    //         $statement->bindParam(':moviehasid', $movie_has_showdate_and_showtime_id, PDO::PARAM_INT);
 
-            $result = $statement->execute();
-        }
+    //         $result = $statement->execute();
+    //     }
 
 
     public function getMovieTimeDate($id) {
@@ -90,10 +90,22 @@ class MovieRepository {
     }
 
     public function getmovieTimeByDateAndID($movie_id,$showDate_id) {
-        $query = "SELECT showTime  FROM showTime JOIN movie_has_showDate_and_showTime ON showTime.id = movie_has_showDate_and_showTime.showTime_id WHERE  movie_id = :movieid AND showDate_id = :showDateid";
+        $query = "SELECT showTime_id,showTime  FROM showTime JOIN movie_has_showDate_and_showTime ON showTime.id = movie_has_showDate_and_showTime.showTime_id WHERE  movie_id = :movieid AND showDate_id = :showDateid";
         $statement = $this->pdo->prepare($query);
         $statement->bindValue(":movieid", $movie_id, \PDO::PARAM_INT);
         $statement->bindValue(":showDateid", $showDate_id, \PDO::PARAM_INT); 
+        //$statement->bindValue(":showTimeid", $showTime_id, \PDO::PARAM_INT);  
+        $statement->execute();
+        $movies = $statement->fetch(PDO::FETCH_ASSOC);
+        return $movies;
+    }
+    
+    public function getIdByDateAndTime($movie_id,$showDate_id,$showTime_id) {
+        $query = "SELECT movie_has_showDate_and_showTime.id FROM movie_has_showDate_and_showTime JOIN showTime ON showTime.id = movie_has_showDate_and_showTime.showTime_id WHERE  movie_id = :movieid AND showDate_id = :showDateid AND showTime_id = :showTimeid";
+        $statement = $this->pdo->prepare($query);
+        $statement->bindValue(":movieid", $movie_id, \PDO::PARAM_INT);
+        $statement->bindValue(":showDateid", $showDate_id, \PDO::PARAM_INT);
+        $statement->bindValue(":showTimeid", $showTime_id, \PDO::PARAM_INT); 
         //$statement->bindValue(":showTimeid", $showTime_id, \PDO::PARAM_INT);  
         $statement->execute();
         $movies = $statement->fetch(PDO::FETCH_ASSOC);
@@ -116,6 +128,167 @@ class MovieRepository {
 
 
 // var_dump($movies);
+
+Class Movie {
+    private string $title;
+    private string $summary;
+    private string $agerating;
+    private string $date;
+    private float $startShowDate;
+    private string $imagePath;
+    
+
+
+
+
+    public function __construct(string $title,string $summary,string $agerating,string $date,float $startShowDate,string $imagePath)
+    {
+       $this-> title=$title;
+       $this-> summary=$summary;
+       $this-> agerating=$agerating;
+       $this-> date=$date;
+       $this-> startShowDate=$startShowDate;
+       $this-> imagePath=$imagePath;
+      
+
+    }
+
+
+    /**
+     * Get the value of title
+     *
+     * @return string
+     */
+    public function getTitle(): string {
+        return $this->title;
+    }
+
+    /**
+     * Set the value of title
+     *
+     * @param string $title
+     *
+     * @return self
+     */
+    public function setTitle(string $title): self {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * Get the value of summary
+     *
+     * @return string
+     */
+    public function getSummary(): string {
+        return $this->summary;
+    }
+
+    /**
+     * Set the value of summary
+     *
+     * @param string $summary
+     *
+     * @return self
+     */
+    public function setSummary(string $summary): self {
+        $this->summary = $summary;
+        return $this;
+    }
+
+    /**
+     * Get the value of agerating
+     *
+     * @return string
+     */
+    public function getAgerating(): string {
+        return $this->agerating;
+    }
+
+    /**
+     * Set the value of agerating
+     *
+     * @param string $agerating
+     *
+     * @return self
+     */
+    public function setAgerating(string $agerating): self {
+        $this->agerating = $agerating;
+        return $this;
+    }
+
+    /**
+     * Get the value of date
+     *
+     * @return string
+     */
+    public function getDate(): string {
+        return $this->date;
+    }
+
+    /**
+     * Set the value of date
+     *
+     * @param string $date
+     *
+     * @return self
+     */
+    public function setDate(string $date): self {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * Get the value of startShowDate
+     *
+     * @return float
+     */
+    public function getStartShowDate(): float {
+        return $this->startShowDate;
+    }
+
+    /**
+     * Set the value of startShowDate
+     *
+     * @param float $startShowDate
+     *
+     * @return self
+     */
+    public function setStartShowDate(float $startShowDate): self {
+        $this->startShowDate = $startShowDate;
+        return $this;
+    }
+
+    /**
+     * Get the value of imagePath
+     *
+     * @return string
+     */
+    public function getImagePath(): string {
+        return $this->imagePath;
+    }
+
+    /**
+     * Set the value of imagePath
+     *
+     * @param string $imagePath
+     *
+     * @return self
+     */
+    public function setImagePath(string $imagePath): self {
+        $this->imagePath = $imagePath;
+        return $this;
+    }
+
+
+// class MovieRepository 
+// {
+//     private $pdo;
+//     public function __construct()
+//     {
+//         $this->pdo=Database::getPdo();
+//     }
+ }
 
 
 

@@ -13,11 +13,12 @@ $movieByDateAndId = $movieRepository -> getmovieTimeByDateAndID ($_POST['id_film
 //var_dump($_POST['quantity']);
 //var_dump($movie_has_showDate);
 //var_dump($totalprice);
-//var_dump($movieByDateAndId);
+var_dump($movieByDateAndId);
 
 ?>
 
 <H1>Merci d'avoir choisi ce film veuillez choisir une horaire : </H1>
+
 
 <form action="FinalEssaie.php" method="POST">
 <input name="id film " type="hidden" value="<?php echo $_POST['id_film_'] ;?>">
@@ -29,7 +30,7 @@ $movieByDateAndId = $movieRepository -> getmovieTimeByDateAndID ($_POST['id_film
 <label for="time"> </label>
 <select name="time" id="time">
    
-<option value="<?php echo $movieByDateAndId['showTime'];?>"><?php echo $movieByDateAndId['showTime'] ?></option>
+<option value="<?php echo $movieByDateAndId['showTime_id'];?>"><?php echo $movieByDateAndId['showTime'] ?></option>
     
 </select>
 

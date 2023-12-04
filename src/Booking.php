@@ -25,25 +25,26 @@ class Booking
         $statement->execute();
     }
     //Creates the booking  after validating cart
-    public function createBooking($user_id, $movie_id, $totalPrice, $quantity)
-    {
+    public function createBooking($user_id, $movie_has_showdate_and_showtime_id, $totalPrice, $quantity){
         $bookingDate = date('Y-m-d H:i:s');
 
-        $bookingStatus = 'Confirmé';
+        $bookingStatus = 'En attente de confirmation';
 
-        $query = "INSERT INTO booking ( totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_id) VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :movieid )";
 
-        $statement = $this->pdo->prepare($query);
+        $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_has_showdate_and_showtime_id) 
+        VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid)";
 
-        $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
-        $statement->bindParam(':totalprice', $totalPrice, PDO::PARAM_STR);
-        $statement->bindParam(':bookingdate', $bookingDate, PDO::PARAM_STR);
-        $statement->bindParam(':bookingstatus', $bookingStatus, PDO::PARAM_STR);
-        $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-        $statement->bindParam(':movieid', $movie_id, PDO::PARAM_INT);
+$statement = $this->pdo->prepare($query);
 
-        $result = $statement->execute();
-        return $result;
+$statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
+$statement->bindParam(':totalprice', $totalPrice, PDO::PARAM_STR);
+$statement->bindParam(':bookingdate', $bookingDate, PDO::PARAM_STR);
+$statement->bindParam(':bookingstatus', $bookingStatus, PDO::PARAM_STR);
+$statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+$statement->bindParam(':moviehasid', $movie_has_showdate_and_showtime_id, PDO::PARAM_INT);
+
+$result = $statement->execute();
+
 
         //Gets last inserted entry of booking
         if ($result) {
