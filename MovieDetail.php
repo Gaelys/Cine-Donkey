@@ -1,19 +1,13 @@
 <?php
 
-require_once  __DIR__ .'/src/MovieRepository.php';
+require_once  __DIR__ .'/src/Movie.php';
 $movieID = $_GET ["id"];
 
-// var_dump($movieID);
-// die;
-$movieRepository = new MovieRepository ();
+
+$movieRepository = new Movie ();
 $alldetails = $movieRepository->getMovieByID($movieID);
 $allshowtimes = $movieRepository->getMovieTimeDate($movieID);
 
-
-
-
-var_dump($allshowtimes);
-//die;
 ?>
 
 <div>
@@ -41,7 +35,7 @@ var_dump($allshowtimes);
         
     </table>
 </div> 
-<form action="Essaie.php" method="POST">
+<form action="ChooseHour.php" method="POST">
 <input name="id film " type="hidden" value="<?php echo $movieID;?>">
 
 <div>

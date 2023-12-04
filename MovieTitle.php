@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__.'/src/MovieRepository.php';
+require_once __DIR__.'/src/Movie.php';
 
-$movieRepository = new MovieRepository ();
+$movieRepository = new Movie ();
 $allTitles = $movieRepository->getMovieTitle();
 
 //var_dump($allTitles);
