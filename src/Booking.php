@@ -24,6 +24,7 @@ class Booking
         $statement->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $statement->execute();
     }
+
     /**********************Creates the booking  after validating cart**************************/
     public function createBooking($user_id, $movie_has_showdate_and_showtime_id, $totalPrice, $quantity)
     {
@@ -44,6 +45,7 @@ class Booking
             $statement->bindParam(':moviehasid', $movie_has_showdate_and_showtime_id, PDO::PARAM_INT);
 
             $result = $statement->execute();
+
 
             if (!$result) {
                 throw new Exception("Error while creating booking");
