@@ -1,6 +1,6 @@
 
 <?php
-/*Cart handlin in SESSION
+/*Cart handling in SESSION , décommenter si besoin, sinon, voir les pages showCart et confirmBooking
 require_once(__DIR__ . '/src/Cart.php');
 
 $title = 'Panier';
