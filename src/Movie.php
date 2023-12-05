@@ -1,9 +1,12 @@
 <?php
  require_once __DIR__ . '/../config/config.php';
 
+
  require_once  'Database.php';
  
 Class Movie {
+
+
     private string $title;
     private string $summary;
     private string $agerating;
@@ -15,29 +18,15 @@ Class Movie {
 
 
     
-
-//     public function __construct() {
-//     $this->pdo = Database::getPdo();
-// }
-
-
-
-
     public function __construct()
     {
        
      $this->pdo = Database::getPdo();
       
-
     }
 
-
-    /**
-     * Get the value of title
-     *
-     * @return string
-     */
     public function getTitle(): string {
+
         return $this->title;
     }
 
@@ -48,17 +37,16 @@ Class Movie {
      *
      * @return self
      */
+
     public function setTitle(string $title): self {
+
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * Get the value of summary
-     *
-     * @return string
-     */
+   
     public function getSummary(): string {
+
         return $this->summary;
     }
 
@@ -69,7 +57,9 @@ Class Movie {
      *
      * @return self
      */
+
     public function setSummary(string $summary): self {
+
         $this->summary = $summary;
         return $this;
     }
@@ -79,7 +69,9 @@ Class Movie {
      *
      * @return string
      */
+
     public function getAgerating(): string {
+
         return $this->agerating;
     }
 
@@ -90,7 +82,9 @@ Class Movie {
      *
      * @return self
      */
+
     public function setAgerating(string $agerating): self {
+
         $this->agerating = $agerating;
         return $this;
     }
@@ -100,7 +94,9 @@ Class Movie {
      *
      * @return string
      */
+
     public function getDate(): string {
+
         return $this->date;
     }
 
@@ -111,7 +107,9 @@ Class Movie {
      *
      * @return self
      */
+
     public function setDate(string $date): self {
+
         $this->date = $date;
         return $this;
     }
@@ -121,7 +119,9 @@ Class Movie {
      *
      * @return float
      */
+
     public function getStartShowDate(): float {
+
         return $this->startShowDate;
     }
 
@@ -132,7 +132,9 @@ Class Movie {
      *
      * @return self
      */
+
     public function setStartShowDate(float $startShowDate): self {
+
         $this->startShowDate = $startShowDate;
         return $this;
     }
@@ -142,7 +144,9 @@ Class Movie {
      *
      * @return string
      */
+
     public function getImagePath(): string {
+
         return $this->imagePath;
     }
 
@@ -153,10 +157,13 @@ Class Movie {
      *
      * @return self
      */
+
     public function setImagePath(string $imagePath): self {
+
         $this->imagePath = $imagePath;
         return $this;
     }
+
 
 
     public function getMovieTimeDate($id) {
@@ -248,6 +255,5 @@ Class Movie {
     
  
    
+}
 
-
- }
