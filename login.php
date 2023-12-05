@@ -50,13 +50,6 @@ if (!empty($_SESSION['idUser'])) {
         <div class="offset-3 mt-4">
             <a class="ml-2 text-warning offset-1" href="signup.php">Je n'ai pas encore de compte</a>
         </div>
-        <div>
-            <label for="password">Mon Mot de passe : </label>
-            <input type="password" id="password" name="password" />
-        </div>
-        <div>
-            <button type="submit">Se Connecter</button>
-        </div>
     </form>
 
 <?php
