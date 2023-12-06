@@ -46,4 +46,5 @@ try {
     // Handle the exception
     echo 'Erreur : ' . $e->getMessage();
 }
-?>
+
+require_once 'templates/footer.php';
