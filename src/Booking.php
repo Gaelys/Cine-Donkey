@@ -59,10 +59,25 @@ class Booking
     /**********************To get cart bookings**************************/
     public function getPendingBookings($user_id)
     {
-        $query = "SELECT b.*, m.title
-        FROM booking b
-        JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-        JOIN movie m ON mhsds.movie_id = m.id
+        $query = "SELECT
+        b.id AS booking_id,
+        m.title AS movie_name,
+        msd.showDate AS show_date,
+        mst.showTime AS show_time,
+        b.quantity,
+        b.totalPrice
+        FROM
+        cine_donkey.booking b
+        JOIN
+        cine_donkey.booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+        JOIN
+        cine_donkey.movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+        JOIN
+        cine_donkey.movie m ON mhs.movie_id = m.id
+        JOIN
+        cine_donkey.showdate msd ON mhs.showDate_id = msd.id
+        JOIN
+        cine_donkey.showtime mst ON mhs.showTime_id = mst.id
         WHERE b.user_id = :userid AND b.bookingStatus = 'En attente de confirmation'
         ORDER BY b.bookingDate";
 

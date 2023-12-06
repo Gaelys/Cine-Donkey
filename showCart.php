@@ -19,14 +19,14 @@ try {
 
     $booking = new Booking();
     $pendingBookings = $booking->getPendingBookings($userId);
-
+    var_dump($pendingBookings);
     //var_dump($pendingBookings);
-    foreach ($pendingBookings as $booking) {
+    foreach ($pendingBookings as $pendingBooking) {
 ?>
         <div>
-            <p><?= $booking['title'] ?>: séance du <?= $showDate ?> à <?= $showTime ?></p>
-            <p><?= $booking['quantity'] ?> places</p>
-            <p><?= $booking['totalPrice'] ?></p>
+            <p><?= $pendingBooking['title'] ?>: séance du <?= $showDate ?> à <?= $showTime ?></p>
+            <p><?= $pendingBooking['quantity'] ?> places</p>
+            <p><?= $pendingBooking['totalPrice'] ?></p>
 
         </div>
     <?php
@@ -37,8 +37,8 @@ try {
         }
     }
     ?>
-    <form action='confirm_booking.php' method='post'>
-        <input type='hidden' name='booking_id' value='<?= $booking['id'] ?>'>
+    <!--form action='confirm_booking.php' method='post'>
+        <input type='hidden' name='booking_id' value='<?= $pendingBooking['id'] ?>'>
         <button type='submit' name='confirm_booking'>Valider mon panier</button>
     </form>
 <?php
