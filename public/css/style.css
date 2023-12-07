@@ -1,3 +1,11 @@
 body {
     padding-top: 7rem
 }
+
+.theater {
+    font-family: 'Lucida Handwriting', 'Lucida Sans Unicode', Verdana, sans-serif;
+}
+
+.totalcard {
+    height: 39em;
+}
