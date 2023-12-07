@@ -19,16 +19,16 @@ try {
 
     $booking = new Booking();
     $pendingBookings = $booking->getPendingBookings($userId);
-
     //var_dump($pendingBookings);
-    ?>
+    //var_dump($pendingBookings);
+?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-8 col-md-8">
                 <?php
                 $totalPrice = 0;
                 foreach ($pendingBookings as $booking) {
-                    ?>
+                ?>
                     <div class="card border-warning mb-1">
                         <h4 class="card-header"><?= $booking['title'] ?> : séance du <?= $showDate ?> à <?= $showTime ?></h4>
                         <div class="card-body">
@@ -36,7 +36,7 @@ try {
                             <div class="mt-1"><?= $booking['totalPrice'] ?>€</div>
                         </div>
                     </div>
-                    <?php
+                <?php
                     $totalPrice += $booking['totalPrice'];
                     if (isset($_GET['error'])) {
                         $errorMessage = "La commande n'a pas pu être validée. Veuillez réessayer.";
@@ -44,28 +44,28 @@ try {
                         echo "<p class='text-danger'>$errorMessage</p>";
                     }
                 }
-            ?>
+                ?>
             </div>
             <div class="card border-warning col-sm-4 col-md-4 totalcard">
                 <h3 class="card-header text-center">Total :</h3>
                 <?php
                 foreach ($pendingBookings as $booking) {
-                    ?>
+                ?>
                     <div class="mt-5">
                         <div class="card-header"><?= $booking['title'] ?></div>
                     </div>
-                    <?php
+                <?php
                 }
                 ?>
-                <div class="text-center text-danger mt-5 mb-5"> <?php echo $totalPrice;?> €</div>
-                <form class="mt-5" action='confirm_booking.php' method='post'>
+                <div class="text-center text-danger mt-5 mb-4"> <?php echo $totalPrice; ?> €</div>
+                <form action='confirm_booking.php' method='post'>
                     <input type='hidden' name='booking_id' value='<?= $booking['id'] ?>'>
-                    <button class="offset-4 mt-5 btn btn-warning" type='submit' name='confirm_booking'>Régler ma commande</button>
+                    <button class="offset-4 btn btn-warning" type='submit' name='confirm_booking'>Régler ma commande</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
 <?php
 } catch (Exception $e) {
     // Handle the exception

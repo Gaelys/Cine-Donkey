@@ -26,14 +26,17 @@ class Booking
     }
 
     /**********************Creates the booking  after validating cart**************************/
-    public function createBooking($user_id, $movie_has_showdate_and_showtime_id, $totalPrice, $quantity)
+    public function createBooking($user_id, $totalPrice, $quantity)
     {
         try {
             $bookingDate = date('Y-m-d H:i:s');
             $bookingStatus = 'En attente de confirmation';
 
-            $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, movie_has_showdate_and_showtime_id) 
-                      VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid)";
+            $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, showDate_id, showTime_id)
+            SELECT :totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid, msd.id as showdate, mst.id as showtime
+            FROM showdate msd
+            JOIN showtime mst ON mhs.showTime_id = mst.id
+            WHERE msd.id = :showdate_id AND mst.id = :showtime_id";
 
             $statement = $this->pdo->prepare($query);
 
@@ -59,10 +62,25 @@ class Booking
     /**********************To get cart bookings**************************/
     public function getPendingBookings($user_id)
     {
-        $query = "SELECT b.*, m.title
-        FROM booking b
-        JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-        JOIN movie m ON mhsds.movie_id = m.id
+        $query = "SELECT
+        b.id ,
+        m.title,
+        msd.showDate,
+        mst.showTime,
+        b.quantity,
+        b.totalPrice
+        FROM
+        booking b
+        JOIN
+        booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+        JOIN
+        movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+        JOIN
+        movie m ON mhs.movie_id = m.id
+        JOIN
+        showdate msd ON mhs.showDate_id = msd.id
+        JOIN
+        showtime mst ON mhs.showTime_id = mst.id
         WHERE b.user_id = :userid AND b.bookingStatus = 'En attente de confirmation'
         ORDER BY b.bookingDate";
 
@@ -159,12 +177,27 @@ class Booking
         try {
             $currentDate = date('Y-m-d H:i:s');
 
-            $query = "SELECT b.*, m.title
-              FROM booking b
-              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-              JOIN movie m ON mhsds.movie_id = m.id
-              WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate > :currentdate
-              ORDER BY b.bookingDate";
+            $query = "SELECT
+            b.id ,
+            m.title,
+            msd.showDate,
+            mst.showTime,
+            b.quantity,
+            b.totalPrice
+            FROM
+            booking b
+            JOIN
+            booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+            JOIN
+            movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+            JOIN
+            movie m ON mhs.movie_id = m.id
+            JOIN
+            showdate msd ON mhs.showDate_id = msd.id
+            JOIN
+            showtime mst ON mhs.showTime_id = mst.id
+            WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate > :currentdate
+            ORDER BY b.bookingDate";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
@@ -185,10 +218,25 @@ class Booking
         try {
             $currentDate = date('Y-m-d H:i:s');
 
-            $query = "SELECT b.*, m.title
-              FROM booking b
-              JOIN movie_has_showdate_and_showtime mhsds ON b.movie_has_showdate_and_showtime_id = mhsds.id
-              JOIN movie m ON mhsds.movie_id = m.id
+            $query = $query = "SELECT
+            b.id ,
+            m.title,
+            msd.showDate,
+            mst.showTime,
+            b.quantity,
+            b.totalPrice
+            FROM
+            booking b
+            JOIN
+            booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+            JOIN
+            movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+            JOIN
+            movie m ON mhs.movie_id = m.id
+            JOIN
+            showdate msd ON mhs.showDate_id = msd.id
+            JOIN
+            showtime mst ON mhs.showTime_id = mst.id
               WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate <= :currentdate
               ORDER BY b.bookingDate";
 
