@@ -6,9 +6,13 @@ $title = 'Mes réservations';
 
 require_once 'templates/head.php';
 
-
+if (!isset($_SESSION['idUser'])) {
+    header('Location: login.php');
+    die;
+}
 $userId = $_SESSION['idUser'];
 //var_dump($userId);
+
 
 $user_bookings = new Booking();
 $currentBookings = $user_bookings->getCurrentBookings($userId); //Récupération de l'id du user connecté une fois ceci est géré en session
