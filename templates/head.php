@@ -1,3 +1,6 @@
+<?php
+require_once(__DIR__ . '/../src/Booking.php');
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -23,7 +26,7 @@
                     </ul>
                     <ul class="navbar-nav me-auto offset-6">
                         <?php
-                        if (empty($_SESSION)) {
+                        if (empty($_SESSION['idUser'])) {
                         ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo $title === 'Se Connecter' ? 'active' : '' ?>" href="login.php">Se connecter</a>
@@ -32,10 +35,19 @@
                                 <a class="nav-link <?php echo $title === 'Inscription' ? 'active' : '' ?>" href="signup.php">S'inscrire</a>
                             </li>
                         <?php
-                        } else if (!empty($_SESSION)) {
+                        } else if (!empty($_SESSION['idUser'])) {
+                        $quantityInCart = new Booking();
+                        $searchForQuantityInCart = $quantityInCart -> getPendingBookings($_SESSION['idUser']);
+                        
+                        $totalQuantity = 0;
+                        foreach ($searchForQuantityInCart as $item) {
+                            $totalQuantity += $item['quantity']; 
+                        }
+                        
+                        $entity = '<strong class="rounded-circle bg-danger p-1">' . $totalQuantity . '</strong>';
                         ?>
                             <li class="nav-item">
-                                <a class="nav-link <?php echo $title === 'Mon Panier' ? 'active' : '' ?>" href="showCart.php">Mon panier</a>
+                                <a class="nav-link <?php echo $title === 'Mon Panier' ? 'active' : '' ?>" href="showCart.php">Mon panier <?php echo $totalQuantity !== 0 ? $entity : '' ?></a>
                             </li>
                             <li class="nav-item dropdown">
                                 <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><?php echo $_SESSION['user']; ?></button>
