@@ -31,29 +31,19 @@ class Booking
         try {
             $bookingDate = date('Y-m-d H:i:s');
             $bookingStatus = 'En attente de confirmation';
-
-            $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id, showDate_id, showTime_id)
-            SELECT :totalprice, :bookingdate, :bookingstatus, :quantity, :userid, :moviehasid, msd.id as showdate, mst.id as showtime
-            FROM showdate msd
-            JOIN showtime mst ON mhs.showTime_id = mst.id
-            WHERE msd.id = :showdate_id AND mst.id = :showtime_id";
-
+            $query = "INSERT INTO booking (totalPrice, bookingDate, bookingStatus, quantity, user_id) 
+                      VALUES (:totalprice, :bookingdate, :bookingstatus, :quantity, :userid)";
             $statement = $this->pdo->prepare($query);
-
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
             $statement->bindParam(':totalprice', $totalPrice, PDO::PARAM_STR);
             $statement->bindParam(':bookingdate', $bookingDate, PDO::PARAM_STR);
             $statement->bindParam(':bookingstatus', $bookingStatus, PDO::PARAM_STR);
             $statement->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-            $statement->bindParam(':moviehasid', $movie_has_showdate_and_showtime_id, PDO::PARAM_INT);
 
             $result = $statement->execute();
-
-
             if (!$result) {
                 throw new Exception("Error while creating booking");
             }
-
             return $this->pdo->lastInsertId();
         } catch (Exception $e) {
             return "Error: " . $e->getMessage();
@@ -184,18 +174,12 @@ class Booking
             mst.showTime,
             b.quantity,
             b.totalPrice
-            FROM
-            booking b
-            JOIN
-            booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
-            JOIN
-            movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
-            JOIN
-            movie m ON mhs.movie_id = m.id
-            JOIN
-            showdate msd ON mhs.showDate_id = msd.id
-            JOIN
-            showtime mst ON mhs.showTime_id = mst.id
+            FROM booking b
+            JOIN booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+            JOIN movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+            JOIN movie m ON mhs.movie_id = m.id
+            JOIN showdate msd ON mhs.showDate_id = msd.id
+            JOIN showtime mst ON mhs.showTime_id = mst.id
             WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate > :currentdate
             ORDER BY b.bookingDate";
 
@@ -225,20 +209,14 @@ class Booking
             mst.showTime,
             b.quantity,
             b.totalPrice
-            FROM
-            booking b
-            JOIN
-            booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
-            JOIN
-            movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
-            JOIN
-            movie m ON mhs.movie_id = m.id
-            JOIN
-            showdate msd ON mhs.showDate_id = msd.id
-            JOIN
-            showtime mst ON mhs.showTime_id = mst.id
-              WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate <= :currentdate
-              ORDER BY b.bookingDate";
+            FROM booking b
+            JOIN booking_has_chosenmovie bhcm ON b.id = bhcm.booking_id
+            JOIN movie_has_showdate_and_showtime mhs ON bhcm.movie_has_showdate_and_showtime_id = mhs.id
+            JOIN movie m ON mhs.movie_id = m.id
+            JOIN showdate msd ON mhs.showDate_id = msd.id
+            JOIN showtime mst ON mhs.showTime_id = mst.id
+            WHERE b.user_id = :userid AND b.bookingStatus = 'Confirmée' AND b.bookingDate <= :currentdate
+            ORDER BY b.bookingDate";
 
             $statement = $this->pdo->prepare($query);
             $statement->bindParam(':userid', $user_id, PDO::PARAM_INT);
