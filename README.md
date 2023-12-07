@@ -38,7 +38,5 @@ bonus: suppression avec demande de confirmation en modal
 
 footer: - 
 
-lien vers la maquette : https://excalidraw.com/#json=JPtigKQPXSzYDTS0BU6eq,wPCK6nToVyjFEuj704eL9w
-
 ressource : Thème Vapor from bootswatch
 			bootstrap

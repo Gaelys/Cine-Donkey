@@ -15,14 +15,14 @@
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <img src="/../public/uploads/images/Logo Cine-Donkey.png"/>
-                    <ul class="navbar-nav me-auto">
+                    <h1 class="px-2 text-info theater">Mnémosyne</h1>
+                    <ul class="px-2 navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link <?php echo $title === 'Accueil' ? 'active' : '' ?>" href="index.php">Accueil</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav me-auto offset-8">
+                    <ul class="navbar-nav me-auto offset-6">
                         <?php
-
                         if (empty($_SESSION)) {
                         ?>
                             <li class="nav-item">
