@@ -19,7 +19,7 @@ try {
 
     $booking = new Booking();
     $pendingBookings = $booking->getPendingBookings($userId);
-    var_dump($pendingBookings);
+    //var_dump($pendingBookings);
 ?>
     <div class="container-fluid">
         <div class="row">
@@ -29,7 +29,7 @@ try {
                 foreach ($pendingBookings as $booking) {
                 ?>
                     <div class="card border-warning mb-1">
-                        <h4 class="card-header"><?= $booking['title'] ?> : séance du <?= $showDate ?> à <?= $showTime ?></h4>
+                        <h4 class="card-header"><?= $booking['title'] ?> : séance du <?= $booking['showDate'] ?> à <?= $booking['showTime'] ?></h4>
                         <div class="card-body">
                             <div><?= $booking['quantity'] ?> places</div>
                             <div class="mt-1"><?= $booking['totalPrice'] ?>€</div>
