@@ -4,6 +4,10 @@ require_once 'templates/head.php';
 
 require_once  __DIR__ . '/src/Movie.php';
 
+if (empty($_POST)) {
+    header('Location: index.php');
+    die;
+}
 $movieRepository = new Movie();
 $movie = $movieRepository->getMovieByID($_POST['id_film']);
 $movie_has_showDate = $movieRepository->getmovie_has_showDate($_POST['id_film'], $_POST['date']);

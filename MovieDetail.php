@@ -10,6 +10,10 @@ $movieRepository = new Movie();
 $alldetails = $movieRepository->getMovieByID($movieID);
 $allshowtimes = $movieRepository->getMovieTimeDate($movieID);
 
+if (empty($allshowtimes) || !is_numeric($movieID)) {
+    header ('Location: index.php');
+    die;
+}
 ?>
 
 <div class="container mt-5">
