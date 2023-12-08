@@ -57,10 +57,10 @@ try {
                 }
                 ?>
                 <div class="text-center text-danger mt-5 mb-4"> <?php echo $totalPrice; ?> €</div>
-                <!--form action='confirm_booking.php' method='post'>
+                <form action='confirm_booking.php' method='post'>
                     <input type='hidden' name='booking_id' value='<?= $booking['id'] ?>'>
                     <button class="offset-4 btn btn-warning" type='submit' name='confirm_booking'>Régler ma commande</button>
-                </form-->
+                </form>
             </div>
         </div>
     </div>

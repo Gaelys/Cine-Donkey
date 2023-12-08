@@ -15,8 +15,8 @@ $currentBookings = $user_bookings->getCurrentBookings($userId); //Récupération
 $pastBookings = $user_bookings->getPastBookings($userId); //Récupération de l'id du user connecté une fois ceci est géré en session
 $showDate = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
 $showTime = 'Placeholder'; //Récupération du showDate et showTime une fois ceux-ci est géré! 
-
-//var_dump($pastBookings);
+var_dump($user_bookings);
+var_dump($pastBookings);
 ?>
 
 <div class="container mt-3">
@@ -26,7 +26,7 @@ $showTime = 'Placeholder'; //Récupération du showDate et showTime une fois ceu
             <div class="card border-secondary mb-3">
                 <div class="card-body">
                     <h4 class="card-header">Réservation n°<?php echo $booking['id']; ?> faite le <?php echo $booking['bookingDate']; ?> :</h4>
-                    <p class="card-text mt-2"><?php echo $booking['title']; ?>: séance du <?php echo $showDate; ?> à <?php echo $showTime; ?></p>
+                    <p class="card-text mt-2"><?php echo $booking['title']; ?>: séance du <?php echo $booking['showDate']; ?> à <?php echo $booking['showTime']; ?></p>
                     <p class="card-text"><?php echo $booking['quantity']; ?> places</p>
                     <p class="card-text"><?php echo $booking['totalPrice']; ?></p>
                     <form class="offset-2" action="delete_booking.php" method="post">
@@ -44,7 +44,7 @@ $showTime = 'Placeholder'; //Récupération du showDate et showTime une fois ceu
             <div class="card border-secondary mb-3">
                 <div class="card-body">
                     <h4 class="card-header">Réservation n°<?php echo $booking['id']; ?> faite le <?php echo $booking['bookingDate']; ?> :</h4>
-                    <p class="card-text mt-2"><?php echo $booking['title']; ?>: séance du <?php echo $showDate; ?> à <?php echo $showTime; ?></p>
+                    <p class="card-text mt-2"><?php echo $booking['title']; ?>: séance du <?php echo $booking['showDate']; ?> à <?php echo $booking['showTime']; ?></p>
                     <p class="card-text"><?php echo $booking['quantity']; ?> places</p>
                     <p class="card-text"><?php echo $booking['totalPrice']; ?></p>
                 </div>
